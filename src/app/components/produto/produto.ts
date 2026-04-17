@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
 import { CurrencyPipe, UpperCasePipe } from '@angular/common'; // Essencial para o pipe funcionar
+import { PrecoFormatadoPipe } from '../../pipes/preco-formatado-pipe';
+
 
 @Component({
   selector: 'app-produto',
-  imports: [CurrencyPipe, UpperCasePipe], // Essencial para o pipe funcionar
+  imports: [CurrencyPipe, UpperCasePipe, PrecoFormatadoPipe], // Essencial para o pipe funcionar
   templateUrl: './produto.html',
   styleUrl: './produto.css',
 })

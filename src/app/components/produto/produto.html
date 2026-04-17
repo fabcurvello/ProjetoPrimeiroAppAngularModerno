@@ -9,7 +9,7 @@
   @for (item of produtos; track item) {
     <div>
       <h3>{{ item.nome | uppercase }}</h3>
-      <p>{{ item.preco | currency:'BRL' }}</p>
+      <p>{{ item.preco | precoFormatado }}</p>
     </div>
   }
 
