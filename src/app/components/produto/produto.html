@@ -1,16 +1,6 @@
-
 <div class="produto">
-  <h2>{{ nome }}</h2>
-  <!-- <p>Preço: R$ {{ preco }}</p> -->
-  @if (mostrarPreco) {
-    <p>Preço: R$ {{ preco }}</p>
-  }
+  <h3>{{ nome }}</h3>
+  <p>R$ {{ preco | currency: 'BRL' }}</p>
 
-  @for (item of produtos; track item) {
-    <div>
-      <h3>{{ item.nome | uppercase }}</h3>
-      <p>{{ item.preco | precoFormatado }}</p>
-    </div>
-  }
-
+  <button (click)="selecionarProduto()">Selecionar {{ nome }}</button>
 </div>
