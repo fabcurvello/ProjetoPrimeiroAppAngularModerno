@@ -1,6 +1,10 @@
 <p>lista-produtos works!</p>
 
-@for (item of produtos; track item.nome) {
+<button (click)="adicionarProduto()">
+  Adicionar Produto
+</button>
+
+@for (item of produtos(); track item.nome) {
   <app-produto
     [nome]="item.nome"
     [preco]="item.preco"
