@@ -10,6 +10,8 @@ import { Produto } from '../produto/produto';
 
 export class ListaProdutos {
 
+  // SIGNALS  
+  // --- Estado do Catálogo ---
   produtos = signal([
     { nome: 'Notebook', preco: 3800 },
     { nome: 'Mouse', preco: 179 }
@@ -17,11 +19,22 @@ export class ListaProdutos {
 
   produtoSelecionado = signal<string | null>(null);
 
+  // --Estado do Carrinho ---
+  carrinho = signal<{ nome: string; preco: number }[]>([]);
+  
+  // COMPUTED
+
   totalProdutos = computed(() => this.produtos().length);
 
   valorTotal = computed(() => {
     return this.produtos()
     .reduce((total, item) => total + item.preco, 0);
+  });
+
+  quantidadeCarrinho = computed(() => this.carrinho().length);
+
+  totalCarrinho = computed(() => {
+    return this.carrinho().reduce((total, item) => total + item.preco, 0);
   });
 
   constructor() {
@@ -38,7 +51,6 @@ export class ListaProdutos {
         document.title = `(${this.totalProdutos()}) Minha Loja`;
       }
     });
-    
   }
   
   exibirProduto(nome: string) {
@@ -60,4 +72,12 @@ export class ListaProdutos {
       { nome: 'Produto novo', preco: 999 } 
     ]);
   }
+
+  adicionarAoCarrinho(produto: { nome: string; preco: number }) {
+    this.carrinho.update(listaAtual => [
+      ...listaAtual,
+      produto
+    ]);
+  }
+
 }
