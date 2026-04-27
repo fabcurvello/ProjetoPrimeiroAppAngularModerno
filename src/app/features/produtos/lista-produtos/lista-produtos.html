@@ -1,17 +1,26 @@
 <!-- Seção de Produtos -->
 <section>
-  <h2>Produtos:</h2>
-  
-  @for (item of produtos(); track $index) {
-    <app-produto
-      [nome]="item.nome"
-      [preco]="item.preco"
-      (produtoSelecionado)="exibirProduto($event)"
-    ></app-produto>
 
-    <button (click)="adicionarAoCarrinho(item)">
-      Adicionar ao Carrinho
-    </button>
+  <h2>Produtos:</h2>
+
+  @if (carregando()) {
+    <p>Carregando produtos...</p>
+  }
+
+  @if (!carregando()) {
+
+    @for (item of produtos(); track $index) {
+      <app-produto
+        [nome]="item.nome"
+        [preco]="item.preco"
+        (produtoSelecionado)="exibirProduto($event)"
+      ></app-produto>
+
+      <button (click)="adicionarAoCarrinho(item)">
+        Adicionar ao Carrinho
+      </button>
+    }
+
   }
 
   <h2>
@@ -33,7 +42,9 @@
 
   <h2>Total de produtos: {{ totalProdutos() }}</h2>
   <h3>Valor total: R$ {{ valorTotal().toFixed(2) }}</h3>
+
 </section>
+
 <!-- Seção do Carrinho -->
 <section>
   <hr>
@@ -47,4 +58,3 @@
   <h3>Itens no carrinho: {{ quantidadeCarrinho() }}</h3>
   <h3>Total do Carrinho: R$ {{ totalCarrinho().toFixed(2) }}</h3>
 </section>
-

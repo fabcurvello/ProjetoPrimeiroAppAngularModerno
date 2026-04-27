@@ -1,6 +1,6 @@
 <div class="produto">
   <h3>{{ nome }}</h3>
-  <p>R$ {{ preco | currency: 'BRL' }}</p>
+  <p>{{ preco | currency: 'BRL' }}</p>
 
   <button (click)="selecionarProduto()">Selecionar {{ nome }}</button>
 </div>
