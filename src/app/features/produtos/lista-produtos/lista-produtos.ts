@@ -78,7 +78,8 @@ export class ListaProdutos {
     // inicia loading
     this.carregando.set(true); 
 
-this.http.get<any[]>('https://fakestoreapi.com/products')
+    this.http.get<{ title: string; price: number }[]>
+    ('https://fakestoreapi.com/products')
       .subscribe({
         next: (dados) => {
 
@@ -89,12 +90,12 @@ this.http.get<any[]>('https://fakestoreapi.com/products')
           }));
 
           this.produtos.set(produtosFormatados);
-          this.carregando.set(false); // 🔥 finaliza loading
+          this.carregando.set(false); // finaliza loading
         },
 
         error: (erro) => {
           console.error('Erro ao carregar produtos:', erro);
-          this.carregando.set(false); // 🔥 evita loading infinito
+          this.carregando.set(false); // evita loading infinito
         }
       });
   }
