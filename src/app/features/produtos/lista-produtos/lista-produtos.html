@@ -9,16 +9,15 @@
 
   @if (!carregando()) {
 
+    <p>Total de produtos: {{ totalProdutos() }}</p>
+
+    <hr>
+
     @for (item of produtos(); track $index) {
       <app-produto
         [nome]="item.nome"
         [preco]="item.preco"
-        (produtoSelecionado)="exibirProduto($event)"
-      ></app-produto>
-
-      <button (click)="adicionarAoCarrinho(item)">
-        Adicionar ao Carrinho
-      </button>
+      />
     }
 
   }

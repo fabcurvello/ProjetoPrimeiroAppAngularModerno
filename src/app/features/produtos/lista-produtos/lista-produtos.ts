@@ -1,5 +1,6 @@
-import { Component, signal, computed, effect } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Component, signal, computed, effect, inject } from '@angular/core';
+
+import { ProdutosService } from '../produtos.service';
 import { Produto } from '../produto/produto';
 
 @Component({
@@ -10,6 +11,8 @@ import { Produto } from '../produto/produto';
 })
 
 export class ListaProdutos {
+
+  private produtosService = inject(ProdutosService);
 
   // =========================
   // SIGNALS
@@ -48,7 +51,7 @@ export class ListaProdutos {
   // CONSTRUTOR
   // =========================
 
-  constructor(private http: HttpClient) {
+  constructor() {
 
     // carrega da API
     this.carregarProdutos();
@@ -73,6 +76,7 @@ export class ListaProdutos {
   // MÉTODO HTTP (API)
   // =========================
 
+  /*
   carregarProdutos() {
 
     // inicia loading
@@ -99,6 +103,25 @@ export class ListaProdutos {
         }
       });
   }
+      */
+
+
+  carregarProdutos() {
+  this.carregando.set(true);
+
+  this.produtosService.buscarProdutos()
+    .subscribe({
+      next: (dados) => {
+        const produtos = this.produtosService.transformarProdutos(dados);
+        this.produtos.set(produtos);
+        this.carregando.set(false);
+      },
+      error: (erro) => {
+        console.error('Erro ao carregar produtos:', erro);
+        this.carregando.set(false);
+      }
+    });
+}
 
   // =========================
   // MÉTODOS EXISTENTES (INALTERADOS)
