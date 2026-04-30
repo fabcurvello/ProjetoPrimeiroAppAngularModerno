@@ -5,9 +5,12 @@ import { EventEmitter } from '@angular/core';
 
 import { CurrencyPipe } from '@angular/common';
 
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+
 @Component({
   selector: 'app-produto',
-  imports: [CurrencyPipe], 
+  imports: [CurrencyPipe, MatButtonModule, MatCardModule], 
   templateUrl: './produto.html',
   styleUrl: './produto.css',
 })
