@@ -9,9 +9,7 @@ import { Produto } from '../produto/produto';
   templateUrl: './lista-produtos.html',
   styleUrl: './lista-produtos.css',
 })
-
 export class ListaProdutos {
-
   private produtosService = inject(ProdutosService);
 
   // =========================
@@ -29,6 +27,9 @@ export class ListaProdutos {
   // controle de carregamento
   carregando = signal(true);
 
+  // estado de erro
+  erro = signal<string | null>(null);
+
   // =========================
   // COMPUTED
   // =========================
@@ -36,15 +37,13 @@ export class ListaProdutos {
   totalProdutos = computed(() => this.produtos().length);
 
   valorTotal = computed(() => {
-    return this.produtos()
-      .reduce((total, item) => total + item.preco, 0);
+    return this.produtos().reduce((total, item) => total + item.preco, 0);
   });
 
   quantidadeCarrinho = computed(() => this.carrinho().length);
 
   totalCarrinho = computed(() => {
-    return this.carrinho()
-      .reduce((total, item) => total + item.preco, 0);
+    return this.carrinho().reduce((total, item) => total + item.preco, 0);
   });
 
   // =========================
@@ -52,7 +51,6 @@ export class ListaProdutos {
   // =========================
 
   constructor() {
-
     // carrega da API
     this.carregarProdutos();
 
@@ -75,42 +73,11 @@ export class ListaProdutos {
   // =========================
   // MÉTODO HTTP (API)
   // =========================
-
-  /*
   carregarProdutos() {
+    this.erro.set(null);
+    this.carregando.set(true);
 
-    // inicia loading
-    this.carregando.set(true); 
-
-    this.http.get<{ title: string; price: number }[]>
-    ('https://fakestoreapi.com/products')
-      .subscribe({
-        next: (dados) => {
-
-          // Adaptação da API para o nosso projeto
-          const produtosFormatados = dados.map(p => ({
-            nome: p.title,
-            preco: p.price
-          }));
-
-          this.produtos.set(produtosFormatados);
-          this.carregando.set(false); // finaliza loading
-        },
-
-        error: (erro) => {
-          console.error('Erro ao carregar produtos:', erro);
-          this.carregando.set(false); // evita loading infinito
-        }
-      });
-  }
-      */
-
-
-  carregarProdutos() {
-  this.carregando.set(true);
-
-  this.produtosService.buscarProdutos()
-    .subscribe({
+    this.produtosService.buscarProdutos().subscribe({
       next: (dados) => {
         const produtos = this.produtosService.transformarProdutos(dados);
         this.produtos.set(produtos);
@@ -118,10 +85,11 @@ export class ListaProdutos {
       },
       error: (erro) => {
         console.error('Erro ao carregar produtos:', erro);
+        this.erro.set('Erro ao carregar produtos. Verifique sua conexão e tente novamente.');
         this.carregando.set(false);
-      }
+      },
     });
-}
+  }
 
   // =========================
   // MÉTODOS EXISTENTES (INALTERADOS)
@@ -132,22 +100,14 @@ export class ListaProdutos {
   }
 
   adicionarProduto() {
-    this.produtos.update(listaAtual => [
-      ...listaAtual,
-      { nome: 'Teclado', preco: 250 }
-    ]);
+    this.produtos.update((listaAtual) => [...listaAtual, { nome: 'Teclado', preco: 250 }]);
   }
 
   substituirProdutos() {
-    this.produtos.set([
-      { nome: 'Produto novo', preco: 999 }
-    ]);
+    this.produtos.set([{ nome: 'Produto novo', preco: 999 }]);
   }
 
   adicionarAoCarrinho(produto: { nome: string; preco: number }) {
-    this.carrinho.update(listaAtual => [
-      ...listaAtual,
-      produto
-    ]);
+    this.carrinho.update((listaAtual) => [...listaAtual, produto]);
   }
 }

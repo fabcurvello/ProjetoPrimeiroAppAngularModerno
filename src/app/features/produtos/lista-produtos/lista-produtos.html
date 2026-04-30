@@ -1,52 +1,57 @@
 <!-- Seção de Produtos -->
 <section>
-
   <h2>Produtos:</h2>
 
+  <!-- Estado 1: Loading -->
   @if (carregando()) {
     <p>Carregando produtos...</p>
   }
 
-  @if (!carregando()) {
+  <!-- Estado 2: Erro -->
+  @if (erro()) {
+    <p style="color: red">
+      {{ erro() }}
+    </p>
 
+    <button (click)="carregarProdutos()">Tentar novamente</button>
+  }
+
+  <!-- Estado 3: Sucesso -->
+  @if (!carregando() && !erro()) {
     <p>Total de produtos: {{ totalProdutos() }}</p>
 
-    <hr>
+    <hr />
 
     @for (item of produtos(); track $index) {
       <app-produto
         [nome]="item.nome"
         [preco]="item.preco"
+        (produtoSelecionado)="exibirProduto($event)"
+        (produtoAdicionado)="adicionarAoCarrinho($event)"
       />
     }
-
   }
 
   <h2>
     Produto selecionado:
     @if (produtoSelecionado()) {
-      <strong style="color: green;">{{ produtoSelecionado() }}</strong>
+      <strong style="color: green">{{ produtoSelecionado() }}</strong>
     } @else {
-      <span style="color: gray;">Nenhum</span>
+      <span style="color: gray">Nenhum</span>
     }
   </h2>
 
-  <button (click)="adicionarProduto()">
-    Adicionar Produto
-  </button>
+  <button (click)="adicionarProduto()">Adicionar Produto</button>
 
-  <button (click)="substituirProdutos()">
-    Substituir Lista
-  </button>
+  <button (click)="substituirProdutos()">Substituir Lista</button>
 
   <h2>Total de produtos: {{ totalProdutos() }}</h2>
   <h3>Valor total: R$ {{ valorTotal().toFixed(2) }}</h3>
-
 </section>
 
 <!-- Seção do Carrinho -->
 <section>
-  <hr>
+  <hr />
 
   <h2>Carrinho:</h2>
 

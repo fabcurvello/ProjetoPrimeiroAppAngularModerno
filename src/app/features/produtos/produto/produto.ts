@@ -17,9 +17,17 @@ export class Produto {
   @Input() preco: number = 0;
 
   @Output() produtoSelecionado = new EventEmitter<string>();
+  @Output() produtoAdicionado = new EventEmitter<{ nome: string; preco: number }>();
 
   selecionarProduto() {
     this.produtoSelecionado.emit(this.nome);
+  }
+
+  adicionarAoCarrinho() {
+    this.produtoAdicionado.emit({
+      nome: this.nome,
+      preco: this.preco
+    });
   }
 }
 
