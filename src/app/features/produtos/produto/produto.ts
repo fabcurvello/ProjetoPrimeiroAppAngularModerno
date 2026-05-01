@@ -1,7 +1,4 @@
-import { Component } from '@angular/core';
-import { Input } from '@angular/core';
-import { Output } from '@angular/core';
-import { EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 import { CurrencyPipe } from '@angular/common';
 
