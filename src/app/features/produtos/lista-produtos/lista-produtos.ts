@@ -1,7 +1,8 @@
 import { Component, signal, computed, effect, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 
-import { ProdutosService } from '../produtos.service';
+import { ProdutosService } from '../../../core/services/produtos.service';
+import { CarrinhoService } from '../../../core/services/carrinho.service';
 import { Produto } from '../produto/produto';
 
 @Component({
@@ -11,19 +12,19 @@ import { Produto } from '../produto/produto';
   styleUrl: './lista-produtos.css',
 })
 export class ListaProdutos {
-  private produtosService = inject(ProdutosService);
 
-  // =========================
-  // SIGNALS
-  // =========================
+  // INJECTS
+  produtosService = inject(ProdutosService);
 
-  // AGORA VEM DA API (inicia vazio)
+  carrinhoService = inject(CarrinhoService);
+
+  quantidadeCarrinho = this.carrinhoService.quantidade;
+  totalCarrinho = this.carrinhoService.total;
+
+  // === SIGNALS
   produtos = signal<{ nome: string; preco: number }[]>([]);
 
   produtoSelecionado = signal<string | null>(null);
-
-  // Carrinho continua igual
-  carrinho = signal<{ nome: string; preco: number }[]>([]);
 
   // controle de carregamento
   carregando = signal(true);
@@ -31,26 +32,17 @@ export class ListaProdutos {
   // estado de erro
   erro = signal<string | null>(null);
 
-  // =========================
-  // COMPUTED
-  // =========================
 
+  // === COMPUTED
   totalProdutos = computed(() => this.produtos().length);
 
   valorTotal = computed(() => {
     return this.produtos().reduce((total, item) => total + item.preco, 0);
   });
 
-  quantidadeCarrinho = computed(() => this.carrinho().length);
 
-  totalCarrinho = computed(() => {
-    return this.carrinho().reduce((total, item) => total + item.preco, 0);
-  });
 
-  // =========================
-  // CONSTRUTOR
-  // =========================
-
+  // === CONSTRUTOR
   constructor() {
     // carrega da API
     this.carregarProdutos();
@@ -71,9 +63,8 @@ export class ListaProdutos {
     });
   }
 
-  // =========================
-  // MÉTODO HTTP (API)
-  // =========================
+
+  // === MÉTODO HTTP (API)
   carregarProdutos() {
     this.erro.set(null);
     this.carregando.set(true);
@@ -92,10 +83,8 @@ export class ListaProdutos {
     });
   }
 
-  // =========================
-  // MÉTODOS EXISTENTES (INALTERADOS)
-  // =========================
 
+  // === DEMAIS MÉTODOS 
   exibirProduto(nome: string) {
     this.produtoSelecionado.set(nome);
   }
@@ -109,6 +98,6 @@ export class ListaProdutos {
   }
 
   adicionarAoCarrinho(produto: { nome: string; preco: number }) {
-    this.carrinho.update((listaAtual) => [...listaAtual, produto]);
+    this.carrinhoService.adicionar(produto);
   }
 }
