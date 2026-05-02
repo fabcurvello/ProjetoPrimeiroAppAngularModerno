@@ -22,14 +22,16 @@
 
     <hr />
 
-    @for (item of produtos(); track $index) {
-      <app-produto
-        [nome]="item.nome"
-        [preco]="item.preco"
-        (produtoSelecionado)="exibirProduto($event)"
-        (produtoAdicionado)="adicionarAoCarrinho($event)"
-      />
-    }
+    <section class="grid-produtos">
+      @for (item of produtos(); track $index) {
+        <app-produto
+          [nome]="item.nome"
+          [preco]="item.preco"
+          (produtoSelecionado)="exibirProduto($event)"
+          (produtoAdicionado)="adicionarAoCarrinho($event)"
+        />
+      }
+    </section>
   }
 
   <h2>
